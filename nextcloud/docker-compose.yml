@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+  app:
+    image: nextcloud
+    container_name: nextcloud:25-apache
+    restart: unless-stopped
+    ports:
+      - 8181:80
+    volumes:
+      - /home/username/services/nextcloud:/var/www/html
+    environment:
+      - MYSQL_PASSWORD=xxxxxx
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - PUID=33
+      - PGID=33
+      - TZ=Europe/London
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true
