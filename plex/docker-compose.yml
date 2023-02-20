@@ -1,4 +1,4 @@
-version: '2'
+version: '3.7'
 services:
   plex:
     container_name: plex
@@ -16,18 +16,13 @@ services:
       - 32414:32414/udp
     environment:
       - TZ=Europe/London
-      - PLEX_CLAIM=claim-xxxxxx
-      - ADVERTISE_IP=http://server.ip.address:32400/
-      - PLEX_UID=1000 # might need to change this
-      - PLEX_GID=1000 # might need to change this
-    hostname: plexserver.example.com
+      - PLEX_CLAIM=claim-xxxx
+      - ADVERTISE_IP=http://192.168.10.100:32400/
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+      - HOSTNAME=DockerPlexServer
+    hostname: plexserver.unifyhubs.com
     volumes:
-      - /home/folder/services/plex/database:/config
-      - /home/folder/services/plex/transcode:/transcode
-      - /home/folder/services/plex/media:/data
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
+      - /home/pietro/services/plex/database:/config
+      - /home/pietro/services/plex/transcode:/transcode
+      - /home/pietro/media:/data
