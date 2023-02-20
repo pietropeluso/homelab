@@ -16,7 +16,7 @@ services:
       - 32414:32414/udp
     environment:
       - TZ=Europe/London
-      - PLEX_CLAIM=claim-xxxx
+      - PLEX_CLAIM=claim-1Ya8dRpdYn8Bh4a4xsQy
       - ADVERTISE_IP=http://192.168.10.100:32400/
       - PLEX_UID=1000
       - PLEX_GID=1000
@@ -26,3 +26,7 @@ services:
       - /home/pietro/services/plex/database:/config
       - /home/pietro/services/plex/transcode:/transcode
       - /home/pietro/media:/data
+
+# You need to use the Plex Claim in order to add this server to your plex account. 
+# The procedure for getting the actual token you need is as follows
+# Visit https://www.plex.tv/claim/
