@@ -1,24 +1,39 @@
 version: '2'
 
 services:
-  app:
-    image: nextcloud
-    container_name: nextcloud:25-apache
+  db:
+    image: mariadb:10.5
+    container_name: mariadb
+    restart: unless-stopped
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - /home/pietro/services/maria:/var/lib/mysql
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=xxxx
+      - MYSQL_PASSWORD=yyyy
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - TZ=Europe/London
+
+  nextcloud:
+    image: nextcloud:25-apache
+    container_name: nextcloud
     restart: unless-stopped
     ports:
       - 8181:80
+    links:
+      - db
+    depends_on:
+      - db
     volumes:
-      - /home/username/services/nextcloud:/var/www/html
+      - /home/pietro/services/nextcloud/www:/var/www/html
+      - /home/pietro/services/nextcloud/data:/data
     environment:
-      - MYSQL_PASSWORD=xxxxxx
+      - MYSQL_PASSWORD=yyyy
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - PUID=33
       - PGID=33
       - TZ=Europe/London
-    networks:
-      - proxy
-
-networks:
-  proxy:
-    external: true
