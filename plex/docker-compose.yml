@@ -4,10 +4,8 @@ services:
     container_name: plex
     image: plexinc/pms-docker
     restart: unless-stopped
-    networks:
-      - proxy
     ports:
-      # - 32400:32400/tcp #web port
+      - 32400:32400/tcp #web port
       - 3005:3005/tcp
       - 8324:8324/tcp
       - 32469:32469/tcp
@@ -28,22 +26,6 @@ services:
       - ./database:/config
       - ./transcode:/transcode
       - /home/pietro/media:/data
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.plex.entrypoints=http"
-      - "traefik.http.routers.plex.rule=Host(`plex.unifyhubs.com`)"
-      - "traefik.http.middlewares.plex-https-redirect-redirectscheme=https"
-      - "traefik.http.routers.plex.middlewares=plex-https-redirect"
-      - "traefik.http.routers.plex-secure.entrypoints=https"
-      - "traefik.http.routers.plex-secure.rule=Host(`plex.unifyhubs.com`)"
-      - "traefik.http.routers.plex-secure.tls=true"
-      - "traefik.http.routers.plex-secure.service=plex"
-      - "traefik.http.services.plex.loadbalancer.server.port=32400"
-      - "traefik.docker.network=proxy"
-
-networks:
-  proxy:
-    external: true
 
 # You need to use the Plex Claim in order to add this server to your plex account. 
 # The procedure for getting the actual token you need is as follows
