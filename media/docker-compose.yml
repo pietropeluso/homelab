@@ -1,0 +1,80 @@
+version: '2'
+services:
+  plex:
+    container_name: plex
+    image: plexinc/pms-docker
+    restart: unless-stopped
+    ports:
+      - 32400:32400/tcp #web ui port
+      - 3005:3005/tcp
+      - 8324:8324/tcp
+      - 32469:32469/tcp
+      - 1900:1900/udp
+      - 32410:32410/udp
+      - 32412:32412/udp
+      - 32413:32413/udp
+      - 32414:32414/udp
+    environment:
+      - TZ=Europe/London
+      - PLEX_CLAIM=claim-xxxxxx
+      - ADVERTISE_IP=http://192.168.10.100:32400/
+      - PLEX_UID=1000
+      - PLEX_GID=1000
+      - HOSTNAME=PlexMediaServer
+    volumes:
+      - ./plex/database:/config
+      - ./plex/transcode:/transcode
+      - /home/pietro/media/movies:/movies
+      - /home/pietro/media/tv:/tv
+  # more info here -->  https://github.com/plexinc/pms-docker
+  # You need to use the Plex Claim in order to add this server to your plex account. 
+  # The procedure for getting the actual token you need is as follows
+  # Visit https://www.plex.tv/claim/
+
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - ./nzbget/config:/config
+      - ./nzbget/downloads:/downloads
+    restart: unless-stopped
+    ports:
+      - 6789:6789
+  
+  sonarr:
+    image: linuxserver/sonarr
+    container_name: sonarr
+    restart: unless-stopped
+    depends_on:
+        - nzbget
+    volumes:
+      - ./sonarr/config:/config
+      - ./nzbget/downloads:/downloads
+      - /home/pietro/media/tv:/tv
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    ports:
+      - 8989:8989
+  
+  radarr:
+    image: linuxserver/radarr
+    container_name: radarr
+    restart: unless-stopped
+    depends_on:
+      - nzbget
+    volumes:
+      - ./radarr/config:/config
+      - ./nzbget/downloads:/downloads
+      - /home/pietro/media/movies:/movies
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    ports:
+      - 7878:7878
