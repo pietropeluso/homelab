@@ -30,6 +30,7 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
+      - "traefik.protocol=https"
       - "traefik.http.routers.plex.entrypoints=http"
       - "traefik.http.routers.plex.rule=Host(`plex.unifyhubs.com`)"
       - "traefik.http.middlewares.plex-https-redirect.redirectscheme.scheme=https"
