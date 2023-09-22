@@ -1,50 +1,4 @@
 http:
- #region routers 
-  routers:
-    cloud:
-      entryPoints:
-        - "https"
-      rule: "Host(`cloud.unifyhubs.com`)"
-      middlewares:
-        - default-headers
-        - https-redirectscheme
-      tls: {}
-      service: cloud
-
-#endregion
-#region services
-  services:
-    plex:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.0.105:32400"
-        passHostHeader: true
-    portainer:
-      loadBalancer:
-        servers:
-          - url: "https://192.168.10.100:9000"
-        passHostHeader: true
-    radarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.10.100:7878"
-        passHostHeader: true
-    sonarr:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.10.100:8989"
-        passHostHeader: true
-    nzbget:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.10.100:6789"
-        passHostHeader: true
-    cloud:
-      loadBalancer:
-        servers:
-          - url: "http://192.168.10.100:8181"
-
-#endregion
   middlewares:
     addprefix-pihole:
       addPrefix:
@@ -62,18 +16,7 @@ http:
         forceSTSHeader: true
         stsIncludeSubdomains: true
         stsPreload: true
-        stsSeconds: 15552000
-        customFrameOptionsValue: SAMEORIGIN
-        customRequestHeaders:
-          X-Forwarded-Proto: https
-
-    idrac:
-      headers:
-        frameDeny: true
-        browserXssFilter: true
-        forceSTSHeader: true
-        stsIncludeSubdomains: true
-        stsSeconds: 15552000
+        stsSeconds: 31536000
         customFrameOptionsValue: SAMEORIGIN
         customRequestHeaders:
           X-Forwarded-Proto: https
