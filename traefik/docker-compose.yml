@@ -2,7 +2,7 @@ version: '3'
 
 services:
   traefik:
-    image: traefik:latest
+    image: traefik:3.0
     container_name: traefik
     restart: unless-stopped
     security_opt:
@@ -12,9 +12,11 @@ services:
     ports:
       - 80:80
       - 443:443
+    env_file: .env
     environment:
-      - CF_API_EMAIL=xxxx
-      - CF_API_KEY=xxxx
+      - CLOUDFLARE_EMAIL=${CF_API_EMAIL}
+      - CF_ZONE_API_TOKEN=${CF_ZONE_API_TOKEN}
+      - CF_DNS_API_TOKEN=${CF_DNS_API_TOKEN}
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -25,7 +27,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`traefik.unifyhubs.com`)"
-      - "traefik.http.middlewares.traefik-auth.basicauth.users=xxxxxxxxx"
+      - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
       - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
