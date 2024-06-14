@@ -56,7 +56,7 @@ services:
     volumes:
       - ./nzbget/config:/config
       - ./nzbget/downloads:/downloads
-      - /home/pietro/media/intermediate:/intermediate
+      - ./nzbget/intermediate:/intermediate
     restart: unless-stopped
     networks:
       - proxy
@@ -82,7 +82,7 @@ services:
     volumes:
       - ./sonarr/config:/config
       - ./nzbget/downloads:/downloads
-      - /home/pietro/media/tv:/tv
+      - /home/pietro/storage/tv:/tv
     environment:
       - PUID=1000
       - PGID=1000
@@ -111,7 +111,7 @@ services:
     volumes:
       - ./radarr/config:/config
       - ./nzbget/downloads:/downloads
-      - /home/pietro/media/movies:/movies
+      - /home/pietro/storage/movies:/movies
     environment:
       - PUID=1000
       - PGID=1000
@@ -143,8 +143,8 @@ services:
       - proxy
     volumes:
       - ./jellyfin/library:/config
-      - /home/pietro/media/movies:/movies
-      - /home/pietro/media/tv:/tvshows
+      - /home/pietro/storage/movies:/movies
+      - /home/pietro/storage/tv:/tvshows
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.jellyfin.entrypoints=http"
