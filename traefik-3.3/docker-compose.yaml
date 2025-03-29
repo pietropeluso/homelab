@@ -1,6 +1,6 @@
 secrets:
   cf-token:
-    file: ./cf-token
+    file: ./configuration/cf-token
 
 services:
   traefik:
@@ -27,10 +27,10 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ../../docker/traefik/traefik.yaml:/traefik.yml:ro
-      - ../../docker/traefik/acme.json:/acme.json #change permission of the acme.json file as 600
-      - ../../docker/traefik/config.yaml:/config.yaml:ro
-      - ../../docker/traefik/logs:/var/log/traefik
+      - ./configuration/traefik.yaml:/traefik.yml:ro
+      - ./configuration/acme.json:/acme.json #change permission of the acme.json file as 600
+      - ./configuration/config.yaml:/config.yaml:ro
+      - ./logs:/var/log/traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=http"
