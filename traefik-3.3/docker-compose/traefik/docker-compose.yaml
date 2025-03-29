@@ -7,7 +7,7 @@ services:
     image: traefik:latest
     container_name: traefik
     restart: unless-stoppped
-    security-opt:
+    security_opt:
       - no-new-privileges:true #helps to increase security
     secrets:
       - cf-token
@@ -21,9 +21,9 @@ services:
       # - 10000:10000 optional
       # - 33073:33073 optional
     environment:
-      - TRAEFIK_DASHBOARD_CREDENTIALS: ${TRAEFIK_DASHBOARD_CREDENTIALS}
-      - CF_API_EMAIL: ${CLOUDFLARE_EMAIL}
-      - CF_DNS_API_TOKEN_FILE: /run/secrets/cf_token
+      - TRAEFIK_DASHBOARD_CREDENTIALS=${TRAEFIK_DASHBOARD_CREDENTIALS}
+      - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
+      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
