@@ -8,7 +8,7 @@ services:
     container_name: traefik
     restart: unless-stopped
     security_opt:
-      - no-new-privileges:true #helps to increase security
+      - no-new-privileges:true # helps to increase security
     secrets:
       - cf-token
     env_file:
@@ -23,7 +23,7 @@ services:
     environment:
       - TRAEFIK_DASHBOARD_CREDENTIALS=${TRAEFIK_DASHBOARD_CREDENTIALS}
       - CF_API_EMAIL=${CLOUDFLARE_EMAIL}
-      - CF_DNS_API_TOKEN_FILE=/run/secrets/cf_token
+      - CF_DNS_API_TOKEN=/run/secrets/cf_token
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -36,7 +36,7 @@ services:
       - "traefik.http.routers.traefik.entrypoints=http"
       - "traefik.http.routers.traefik.rule=Host(`dashboard.unifyhubs.com`)"
       - "traefik.http.middlewares.traefik-auth.basicauth.users=${TRAEFIK_DASHBOARD_CREDENTIALS}"
-      - "traefik.http.middlewares.traefik-https-redirect-redirectscheme.scheme=https"
+      - "traefik.http.middlewares.traefik-https-redirect.redirectscheme.scheme=https"
       - "traefik.http.middlewares.sslheader.headers.customrequestheaders.X-Forwarded-Proto=https"
       - "traefik.http.routers.traefik.middlewares=traefik-https-redirect"
       - "traefik.http.routers.traefik-secure.entrypoints=https"
