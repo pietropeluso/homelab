@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   db:
     image: mariadb:10.5
@@ -7,18 +5,18 @@ services:
     restart: unless-stopped
     command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
     volumes:
-      - /home/pietro/services/maria:/var/lib/mysql
+      - ./maria:/var/lib/mysql
     ports:
       - 3306:3306
     environment:
-      - MYSQL_ROOT_PASSWORD=xxxx
-      - MYSQL_PASSWORD=yyyy
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-      - TZ=Europe/London
+      - TZ=${TIMEZONE}
 
   nextcloud:
-    image: nextcloud:25-apache
+    image: nextcloud:29-apache
     container_name: nextcloud
     restart: unless-stopped
     ports:
@@ -28,12 +26,14 @@ services:
     depends_on:
       - db
     volumes:
-      - /home/pietro/services/nextcloud/www:/var/www/html
-      - /home/pietro/services/nextcloud/data:/data
+      - ./www:/var/www/html
+      - /home/pietro/storage/nextcloud:/data
     environment:
-      - MYSQL_PASSWORD=yyyy
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
       - PUID=33
       - PGID=33
-      - TZ=Europe/London
+      - TZ=${TIMEZONE}
+
+# Info: https://github.com/nextcloud/docker
