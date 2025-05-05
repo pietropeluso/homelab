@@ -1,27 +1,25 @@
 services:
   caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: caddy
-    image: docker.io/library/caddy:2-alpine
     restart: unless-stopped
+    env_file: .env
     ports:
       - 80:80
       - 443:443
+#      - 2019:2019 #remove if you do not want admin API
+    networks:
+      - caddy-network
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy-data:/data:rw
       - caddy-config:/config:rw
-    # environment:
-    #   - N8N_HOSTNAME=${N8N_HOSTNAME:-":8001"}
-    #   - LETSENCRYPT_EMAIL=${LETSENCRYPT_EMAIL:-internal}
-    # cap_drop:
-    #   - ALL
-    # cap_add:
-    #   - NET_BIND_SERVICE
-    # logging:
-    #   driver: "json-file"
-    #   options:
-    #     max-size: "1m"
-    #     max-file: "1"
+    environment:
+      - CLOUDFLARE_EMAIL=${CF_EMAIL}
+      - CLOUDFLARE_API_TOKEN=${CF_API_TOKEN}}
+      - ACME_AGREE=true
 
 volumes:
   caddy-data:
@@ -29,7 +27,7 @@ volumes:
 
 networks:
   caddy-network:
-    # external: true
+     external: true
 
 # command to reload Caddy after making changes to Caddyfile
 # > docker compose exec -w /etc/caddy caddy caddy reload

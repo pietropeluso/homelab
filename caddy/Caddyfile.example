@@ -1,6 +1,82 @@
 {
-    email:
-
+	acme_ca	https://acme-staging-v02.api.letsencrypt.org/directory
+#	acme_ca https://acme-v02.api.letsencrypt.org/directory 
 }
 
-example.xyz
+maindomain.xyz {
+	root * /usr/share/caddy
+	file_server
+
+        tls {
+                dns cloudflare {env.CF_API_TOKEN} 
+                propagation_delay 2m
+                resolvers 1.1.1.1
+	}
+
+	log {
+		output file /var/log/maindomain/root.log
+	}
+}
+
+www.maindomain.xyz {
+	redir https://maindomain.xyz{uri}
+	handle_errors {
+                respond "{err.status_code} {err.status_text}"
+        }
+}
+
+jellyfin.maindomain.xyz {
+	reverse_proxy jellyfin:8096
+	
+	handle_errors {
+                respond "{err.status_code} {err.status_text}"
+        }
+
+	log {
+		output file /var/log/maindomain/jellyfin.log
+	}
+}
+
+portainer.maindomain.xyz {
+	reverse_proxy portainer:9000
+	handle_errors {
+		respond "{err.status_code} {err.status_text}"
+	}
+
+	log {
+		output file /var/log/maindomain/portainer.log
+	}
+}
+
+radarr.maindomain.xyx {
+	reverse_proxy radarr:7878
+	handle_errors {
+                respond "{err.status_code} {err.status_text}"
+        }
+
+	log {
+		output file /var/log/maindomain/radarr.log
+	}
+}
+
+sonarr.maindomain.xyx { 
+        reverse_proxy sonarr:8989
+        handle_errors {
+                respond "{err.status_code} {err.status_text}"
+        }
+
+	log {
+		output file /var/log/maindomain/sonarr.log
+	}
+}
+
+n8n.maindomain.xyz {
+	reverse_proxy n8n:5678
+	handle_errors {
+		respond "{err.status_code} {err.status_text}"
+	}
+
+	log {
+		output file /var/log/maindomain/n8n.log
+	}
+}
