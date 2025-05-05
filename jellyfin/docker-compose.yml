@@ -15,8 +15,8 @@ services:
       - '993' # render
     volumes:
       - ./jellyfin/library:/config
-      - /home/pietro/storage/movies:/movies
-      - /home/pietro/storage/tv:/tvshows
+      - /home/pietro/storage/media/movies:/movies
+      - /home/pietro/storage/media/tv:/tvshows
     networks:
       - caddy-network
 

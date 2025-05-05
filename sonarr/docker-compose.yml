@@ -6,7 +6,7 @@ services:
     volumes:
       - ./config:/config
       - /home/pietro/storage/downloads/complete:/downloads
-      - /home/pietro/storage/tv:/tv
+      - /home/pietro/storage/media/tv:/tv
     environment:
       - PUID=1000
       - PGID=1000
@@ -19,7 +19,3 @@ services:
 networks:
   caddy-network:
     external: true  #or comment this line to auto create the network
-
-
-# /etc/fstab entry for directory storage
-# /dev/sdb /home/pietro/storage ext4 defaults,user,rw 0 2
