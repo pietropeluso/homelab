@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   syncthing:
     image: syncthing/syncthing
@@ -16,3 +14,6 @@ services:
       - 22000:22000/udp # QUIC file transfers
       - 21027:21027/udp # Receive local discovery broadcasts
     restart: unless-stopped
+
+# /etc/fstab entry for directory storage
+# /dev/sdb /home/pietro/storage ext4 defaults,user,rw 0 2
