@@ -11,6 +11,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
+    ports:
+      - 7878:7878
     networks:
       - caddy-network
 
