@@ -17,6 +17,8 @@ services:
       - ./jellyfin/library:/config
       - /home/pietro/storage/media/movies:/movies
       - /home/pietro/storage/media/tv:/tvshows
+    ports:
+      - 8096:8096
     networks:
       - caddy-network
 
