@@ -1,11 +1,16 @@
-
 volumes:
   db_storage:
   n8n_storage:
+
 services:
   postgres:
     image: postgres:16
+    container_name: postgres
     restart: unless-stopped
+    networks:
+      - caddy-network
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
@@ -26,9 +31,9 @@ services:
     container_name: n8n
     restart: unless-stopped
     ports:
-      - '127.0.0.1:5678:5678'
+      - 5678:5678
     networks:
-      - proxy
+      - caddy-network
     environment:
       - N8N_HOST=${N8N_SUBDOMAIN}.${DOMAIN_NAME}
       - N8N_PORT=5678
@@ -47,23 +52,7 @@ services:
       - postgres
     volumes:
       - n8n_storage:/home/node/.n8n
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.n8n.entrypoints=http"
-      - "traefik.http.routers.n8n.rule=Host(`${N8N_SUBDOMAIN}.${DOMAIN_NAME}`)"
-      - "traefik.http.middlewares.n8n-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.n8n.middlewares=n8n-https-redirect"
-      - "traefik.http.routers.n8n-secure.entrypoints=https"
-      - "traefik.http.routers.n8n-secure.rule=Host(`${N8N_SUBDOMAIN}.${DOMAIN_NAME}`)"
-      - "traefik.http.routers.n8n-secure.tls=true"
-      - "traefik.http.routers.n8n-secure.service=n8n"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.n8n.tls=true"
-      - "traefik.http.routers.n8n.tls.certResolver=leresolver"
-      - "traefik.http.routers.n8n.tls.domains=${N8N_SUBDOMAIN}.${DOMAIN_NAME}"
-
 
 networks:
-  proxy:
+  caddy-network:
     external: true  #or comment this line to auto create the network
