@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./config:/config
-      - /home/pietro/storage/downloads/complete:/downloads
+      - /home/pietro/storage/media/downloads/complete:/downloads
       - /home/pietro/storage/media/tv:/tv
     environment:
       - PUID=1000

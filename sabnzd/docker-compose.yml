@@ -8,8 +8,8 @@ services:
       - TZ=Europe/London
     volumes:
       - ./config:/config
-      - /home/pietro/storage/downloads/complete:/downloads #optional
-      - /home/pietro/storage/downloads/incomplete:/incomplete-downloads #optional
+      - /home/pietro/storage/media/downloads/complete:/downloads #optional
+      - /home/pietro/storage/media/downloads/incomplete:/incomplete-downloads #optional
     ports:
       - 8080:8080
     restart: unless-stopped
